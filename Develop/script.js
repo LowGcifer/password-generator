@@ -1,62 +1,54 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-function generateCharacterAmountRange() {
-  var characterAmountRange = prompt(
-    "How many characters do you want in the password, between 8 and 128."
-  );
-  if (characterAmountRange >= 8 && characterAmountRange <= 128) {
-  } else {
-    alert("Incorrect input!");
-    input = generateCharacterAmountRange();
-  }
-}
-
-function generateSpecialCharacters() {
-  var specialCharacters = prompt(
-    "Do you want to include special characters? Y/N"
-  ).toUpperCase();
-  if (specialCharacters === "Y" || specialCharacters === "N") {
-  } else {
-    alert("Incorrect input!");
-    input = generateSpecialCharacters();
-  }
-}
-
-function generateLowerCase() {
-  var lowerCase = prompt(
-    "Do you want to include lowercase letters? Y/N"
-  ).toUpperCase();
-  if (lowerCase === "Y" || lowerCase === "N") {
-  } else {
-    alert("Incorrect input!");
-    input = generateLowerCase();
-  }
-}
-
-function generateUpperCase() {
-  var upperCase = prompt(
-    "Do you want to include uppercase letters? Y/N"
-  ).toUpperCase();
-  if (upperCase === "Y" || upperCase === "N") {
-  } else {
-    alert("Incorrect input!");
-    input = generateUpperCase();
-  }
-}
+// Data
+// Character Sets
+var lowerCaseCharacters = "abcdefghijklmnopqrstuvwxyz".split("");
+var upperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+var numbers = "1234567890".split("");
+var specialCharacters = "!@#$%^&*(){}[]?_-=+".split("");
 
 function generatePassword() {
-  generateCharacterAmountRange();
-  generateSpecialCharacters();
-  generateLowerCase();
-  generateUpperCase();
+  var characterAmount = getCharacterAmount();
+  var useLowerCase = confirm("Do you want lowercase characters?");
+  var useUpperCase = confirm("Do you want uppercase characters?");
+  var useNumbers = confirm("Do you want numbers?");
+  var useSpecialCharacters = confirm("Do you want to use special characters?");
+
+  if (!useLowerCase && !useUpperCase && !useNumbers && !useSpecialCharacters) {
+    alert("You need to select yes for at least one prompt!");
+    generatePassword();
+  }
+
+  var chosenCharacters = "";
+  if (useLowerCase) chosenCharacters += lowerCaseCharacters;
+  if (useUpperCase) chosenCharacters += upperCaseCharacters;
+  if (useSpecialCharacters) chosenCharacters += specialCharacters;
+  if (useNumbers) chosenCharacters += numbers;
+  console.log(chosenCharacters);
+
+  var newPassword = "";
+  for (var i = 1; i <= characterAmount; i++) {
+    var randomCharacter = chosenCharacters.charAt(
+      Math.floor(Math.random() * chosenCharacters.length)
+    );
+    newPassword += randomCharacter;
+    console.log(randomCharacter);
+  }
+  return newPassword;
 }
 
-var characterAmountRange = generateCharacterAmountRange();
-var upperCase = generateUpperCase();
-var lowerCase = generateLowerCase();
-var specialCharacters = generateSpecialCharacters();
-
+function getCharacterAmount() {
+  var characterAmount = prompt(
+    "How many characters for the password? Between 8 - 128"
+  );
+  console.log("Password Length ", characterAmount);
+  if (characterAmount < 8 || characterAmount > 128) {
+    alert("The password must be from 8 - 128 characters");
+    getCharacterAmount();
+  }
+  return characterAmount;
+}
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
